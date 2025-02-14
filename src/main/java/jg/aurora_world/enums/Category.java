@@ -1,5 +1,8 @@
 package jg.aurora_world.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum Category {
     PERSONAL_FAVORITE("개인 즐겨 찾기"),
     WORK_MATERIAL("업무 활용 자료"),
@@ -10,9 +13,5 @@ public enum Category {
 
     Category(String description) {
         this.description = description;
-    }
-
-    public String getDescription() {
-        return description;
     }
 }
