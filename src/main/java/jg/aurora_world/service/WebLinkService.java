@@ -2,17 +2,23 @@ package jg.aurora_world.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import jg.aurora_world.dto.request.WebLinkRequest;
+import jg.aurora_world.entity.Users;
 import jg.aurora_world.entity.WebLink;
+import jg.aurora_world.entity.WebLinkPermission;
+import jg.aurora_world.enums.PermissionType;
 import jg.aurora_world.repository.WebLinkRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class WebLinkService {
     private final WebLinkRepository webLinkRepository;
+    private final UsersService usersService;
+    private final WebLinkPermissionService webLinkPermissionService;
 
     public WebLink getById(Long id) {
         return webLinkRepository.findById(id).orElse(null);
@@ -22,8 +28,30 @@ public class WebLinkService {
         return webLinkRepository.findAll();
     }
 
+    public List<WebLink> getAllWebLinkByPermissionType(PermissionType permissionType) {
+        Long userId = usersService.getLoggedInUser().getId();
+        List<WebLinkPermission> webLinkPermissions = webLinkPermissionService.getAllWebLinkByPermissionType(userId, permissionType);
+        List<WebLink> webLinks = new ArrayList<>();
+        for(WebLinkPermission webLinkPermission : webLinkPermissions) {
+            webLinks.add(webLinkPermission.getWebLink());
+        }
+
+        return webLinks;
+    }
+
     public WebLink addWebLink(WebLinkRequest request) {
-        return webLinkRepository.save(request.toEntity());
+        WebLink webLink= request.toEntity();
+        Users user = usersService.getLoggedInUser();
+
+        if(user == null) {
+            throw new EntityNotFoundException("user not found");
+        }
+        webLink.setCreatedBy(user.getLoginId());
+        webLinkRepository.save(webLink);
+        webLinkPermissionService.addWebLinkPermission(user.getId(), webLink.getId(), PermissionType.READ);
+        webLinkPermissionService.addWebLinkPermission(user.getId(), webLink.getId(), PermissionType.WRITE);
+
+        return webLink;
     }
 
     public WebLink updateWebLink(WebLinkRequest request, Long webLinkId) {
