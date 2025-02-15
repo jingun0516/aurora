@@ -5,6 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -19,6 +22,9 @@ public class Users {
 
     @Column(nullable = false)
     private String password;
+
+    @OneToMany(mappedBy = "users")
+    private List<WebLinkPermission> linkPermissions = new ArrayList<>();
 
     public Users(String loginId, String password) {
         this.loginId = loginId;
