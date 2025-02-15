@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="headerFragment">
+    <head>
+        <meta charset="UTF-8">
+        <title>웹링크 등록</title>
+    </head>
+    <body>
+    <div>
+        <form id="weblinkRegisterForm" action="/api/weblink" method="post">
+            <input type="text" id="weblink-name" name="name" required placeholder="웹링크 이름">
+            <input type="text" id="weblink-url" name="url" required placeholder="웹링크 url">
+            <select id="weblink-category" name="category" required>
+                <option value="">웹 링크 카테고리 선택</option>
+                <option th:each="category : ${T(jg.aurora_world.enums.Category).values()}"
+                        th:value="${category.name()}"
+                        th:text="${category.description}">
+                </option>
+            </select>
+            <button type="submit" id="btn-weblink-register">등록</button>
+        </form>
+    </div>
+    </body>
+</th:block>
+<script src="/js/weblink-register.js"></script>
+</html>
