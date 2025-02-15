@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -27,6 +30,9 @@ public class WebLink {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Category category;
+
+    @OneToMany(mappedBy = "webLink")
+    private List<WebLinkPermission> linkPermissions = new ArrayList<>();
 
     public WebLink(String name, String url, Category category) {
         this.name = name;
