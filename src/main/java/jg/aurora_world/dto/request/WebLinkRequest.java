@@ -1,5 +1,6 @@
 package jg.aurora_world.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jg.aurora_world.entity.WebLink;
 import jg.aurora_world.enums.Category;
 import lombok.Getter;
@@ -10,6 +11,7 @@ import lombok.Setter;
 public class WebLinkRequest {
     private String name;
     private String url;
+    @JsonProperty
     private Category category;
 
     public WebLink toEntity() {
