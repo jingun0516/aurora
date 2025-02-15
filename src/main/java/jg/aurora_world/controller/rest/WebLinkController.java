@@ -1,7 +1,8 @@
-package jg.aurora_world.controller;
+package jg.aurora_world.controller.rest;
 
 import jg.aurora_world.dto.request.WebLinkRequest;
 import jg.aurora_world.entity.WebLink;
+import jg.aurora_world.enums.PermissionType;
 import jg.aurora_world.service.WebLinkService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -34,5 +35,10 @@ public class WebLinkController {
     public ResponseEntity<Void> delete(@PathVariable Long webLinkId) {
         webLinkService.deleteWebLink(webLinkId);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<WebLink>> getReadableWebLinks() {
+        return ResponseEntity.ok(webLinkService.getAllWebLinkByPermissionType(PermissionType.READ));
     }
 }
