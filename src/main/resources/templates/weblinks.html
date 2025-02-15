@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="headerFragment">
+    <head>
+        <meta charset="UTF-8">
+        <title>웹링크 목록</title>
+    </head>
+    <body>
+    <div>
+        <tr th:each="webLink : ${webLinks}">
+            <td th:text="${webLink.name}"></td>
+            <td th:text="${webLink.url}"></td>
+            <td th:text="${webLink.category.getDescription()}"></td>
+        </tr>
+    </div>
+    </body>
+</th:block>
+<script src="/js/weblink-register.js"></script>
+</html>
