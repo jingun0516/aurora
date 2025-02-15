@@ -4,22 +4,41 @@ import jg.aurora_world.dto.request.UsersRequest;
 import jg.aurora_world.entity.Users;
 import jg.aurora_world.repository.UsersRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class UsersService {
     private final UsersRepository usersRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
+
+    public Users getById(Long userId) {
+        return usersRepository.findById(userId).orElse(null);
+    }
 
     public Users register(UsersRequest request) {
-        if(checkLoginId(request.getLoginId())) {
-            return null;
-        }
+        Users user = request.toEntity();
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-        return usersRepository.save(request.toEntity());
+        return usersRepository.save(user);
     }
 
     public Boolean checkLoginId(String loginId) {
         return usersRepository.existsByLoginId(loginId);
+    }
+
+    public Users getLoggedInUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated() || authentication.getPrincipal().equals("anonymousUser")) {
+            return null;
+        }
+
+        String loginId = authentication.getName();
+
+        return usersRepository.findByLoginId(loginId);
     }
 }
