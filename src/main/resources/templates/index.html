@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<th:block th:fragment="headerFragment">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>웹 링크 관리</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 20px;
+            }
+
+            .container {
+                max-width: 600px;
+                margin: auto;
+            }
+
+            .hidden {
+                display: none;
+            }
+
+            input, select, button {
+                display: block;
+                margin: 10px 0;
+                padding: 8px;
+                width: 100%;
+            }
+        </style>
+    </head>
+    <body>
+    <div class="container">
+        <div sec:authorize="!isAuthenticated()">
+            <a href="/login">로그인</a>
+            <a href="/signup">회원가입</a>
+        </div>
+        <div sec:authorize="isAuthenticated()">
+            <a href="/logout">로그아웃</a>
+            <a href="/weblink/register">웹 링크 등록</a>
+            <a href="/weblink/all">웹 링크 목록</a>
+        </div>
+    </div>
+    </body>
+</th:block>
+</html>
