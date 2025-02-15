@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/layout">
+<head>
+    <meta charset="UTF-8">
+</head>
+<th:block layout:fragment="content">
+    <div class="wrap member signup">
+        <div class="w_1280">
+            <div class="tit mw_50">
+                <h1>회원가입</h1>
+            </div>
+            <section>
+                <form id="signupForm" action="/signup" method="post">
+                    <input type="text" id="loginId" name="loginId" required placeholder="아이디">
+                    <input type="password" id="password" name="password" required placeholder="비밀번호 입력">
+                    <div class="btn_box">
+                        <button type="button" onclick="location.href='/login'" class="btn">취소</button>
+                        <button type="submit" class="btn">회원가입</button>
+                    </div>
+                </form>
+            </section>
+        </div>
+    </div>
+</th:block>
+<script src="/js/signup.js"></script>
+</html>
