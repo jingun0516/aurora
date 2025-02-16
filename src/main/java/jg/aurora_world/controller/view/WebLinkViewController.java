@@ -24,8 +24,11 @@ public class WebLinkViewController {
 
     @GetMapping("/all")
     public String readableWebLink(Model model) {
-        List<WebLink> webLinks = webLinkService.getAllWebLinkByPermissionType(PermissionType.READ);
-        model.addAttribute("webLinks", webLinks);
+        List<WebLink> readableWebLinks = webLinkService.getAllWebLinkByPermissionType(PermissionType.READ);
+        model.addAttribute("readableWebLinks", readableWebLinks);
+
+        List<WebLink> myWebLinks = webLinkService.getAllMyWebLinks();
+        model.addAttribute("myWebLinks", myWebLinks);
 
         return "weblinks";
     }

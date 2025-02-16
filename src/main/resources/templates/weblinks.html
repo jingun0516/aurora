@@ -1,19 +1,126 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>웹링크 목록</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f4f4f4;
+        }
+
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
 <th:block th:fragment="headerFragment">
-    <head>
-        <meta charset="UTF-8">
-        <title>웹링크 목록</title>
-    </head>
-    <body>
     <div>
-        <tr th:each="webLink : ${webLinks}">
-            <td th:text="${webLink.name}"></td>
-            <td th:text="${webLink.url}"></td>
-            <td th:text="${webLink.category.getDescription()}"></td>
-        </tr>
+        <h2>나의 웹링크 목록</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>이름</th>
+                <th>URL</th>
+                <th>카테고리</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="webLink : ${myWebLinks}" th:id="|row-${webLink.id}|">
+                <!-- 일반 출력 모드 -->
+                <td>
+                    <span th:text="${webLink.name}" th:id="|text-name-${webLink.id}|"></span>
+                    <input type="text" th:value="${webLink.name}" th:id="|input-name-${webLink.id}|"
+                           style="display: none;">
+                </td>
+                <td>
+                    <span th:text="${webLink.url}" th:id="|text-url-${webLink.id}|"></span>
+                    <input type="text" th:value="${webLink.url}" th:id="|input-url-${webLink.id}|"
+                           style="display: none;">
+                </td>
+                <td>
+                    <span th:text="${webLink.category.getDescription()}" th:id="|text-category-${webLink.id}|"></span>
+                    <select th:id="|select-category-${webLink.id}|" style="display: none;">
+                        <option value="">웹 링크 카테고리 선택</option>
+                        <option th:each="category : ${T(jg.aurora_world.enums.Category).values()}"
+                                th:value="${category.name()}"
+                                th:text="${category.description}"
+                                th:selected="${webLink.category.name() == category.name()}">
+                        </option>
+                    </select>
+                </td>
+                <td>
+                    <!-- 수정 버튼 -->
+                    <button class="btn edit-btn"
+                            th:id="|edit-btn-${webLink.id}|"
+                            th:onclick="|toggleEditMode(${webLink.id})|">
+                        수정
+                    </button>
+                    <!-- 저장 & 취소 버튼 (초기에 숨김) -->
+                    <button class="btn save-btn"
+                            th:id="|save-btn-${webLink.id}|"
+                            th:onclick="|updateWebLink(${webLink.id})|"
+                            style="display: none;">
+                        저장
+                    </button>
+                    <button class="btn cancel-btn"
+                            th:id="|cancel-btn-${webLink.id}|"
+                            th:onclick="|toggleEditMode(${webLink.id}, true)|"
+                            style="display: none;">
+                        취소
+                    </button>
+                </td>
+                <td>
+                    <button class="btn delete-btn"
+                            th:onclick="|deleteWebLink(${webLink.id})|">
+                        삭제
+                    </button>
+                </td>
+            </tr>
+
+        </table>
+        <table>
+            <h2>읽기 권한이 있는 웹링크 목록</h2>
+            <thead>
+            <tr>
+                <th>이름</th>
+                <th>URL</th>
+                <th>카테고리</th>
+            </tr>
+            </thead>
+            <tr th:each="webLink : ${readableWebLinks}">
+                <td th:text="${webLink.name}"></td>
+                <td th:text="${webLink.url}"></td>
+                <td th:text="${webLink.category.getDescription()}"></td>
+                <td>
+                    <button class="btn edit-btn"
+                            th:onclick="|updateWebLink(${webLink.id})|">
+                        수정
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
     </div>
-    </body>
 </th:block>
-<script src="/js/weblink-register.js"></script>
+<script src="/js/weblinks.js"></script>
+</body>
 </html>

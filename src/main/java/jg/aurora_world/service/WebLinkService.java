@@ -39,6 +39,16 @@ public class WebLinkService {
         return webLinks;
     }
 
+    public List<WebLink> getAllMyWebLinks() {
+        Users user = usersService.getLoggedInUser();
+        if(user == null) {
+            throw new EntityNotFoundException("User not found");
+        }
+        String loginId = user.getLoginId();
+
+        return webLinkRepository.findAllByCreatedBy(loginId);
+    }
+
     public WebLink addWebLink(WebLinkRequest request) {
         WebLink webLink= request.toEntity();
         Users user = usersService.getLoggedInUser();
@@ -48,8 +58,6 @@ public class WebLinkService {
         }
         webLink.setCreatedBy(user.getLoginId());
         webLinkRepository.save(webLink);
-        webLinkPermissionService.addWebLinkPermission(user.getId(), webLink.getId(), PermissionType.READ);
-        webLinkPermissionService.addWebLinkPermission(user.getId(), webLink.getId(), PermissionType.WRITE);
 
         return webLink;
     }
