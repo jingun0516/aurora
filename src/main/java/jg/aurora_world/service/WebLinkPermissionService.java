@@ -47,4 +47,8 @@ public class WebLinkPermissionService {
 
         return permissionsByType;
     }
+
+    public void deleteWebLinkPermission(Long weblinkPermissionId) {
+        webLinkPermissionRepository.deleteById(weblinkPermissionId);
+    }
 }
