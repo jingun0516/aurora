@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -30,10 +31,13 @@ public class MainViewController {
     }
 
     @GetMapping("/users")
-    public String users(Model model) {
+    public String users(@RequestParam Long weblink_id, Model model) {
         List<Users> users = usersService.getUsers();
-
         model.addAttribute("users", users);
+
+        if (weblink_id != null) {
+            model.addAttribute("weblink_id", weblink_id);
+        }
 
         return "users";
     }
