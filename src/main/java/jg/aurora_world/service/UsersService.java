@@ -22,7 +22,10 @@ public class UsersService {
     }
 
     public List<Users> getUsers() {
-        return usersRepository.findAll();
+        List<Users> users = usersRepository.findAll();
+        users.remove(getLoggedInUser());
+
+        return users;
     }
 
     public Users register(UsersRequest request) {
