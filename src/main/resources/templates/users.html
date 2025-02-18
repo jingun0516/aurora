@@ -50,12 +50,28 @@
     <tbody>
     <tr th:each="user : ${users}">
         <td th:text="${user.loginId}"></td>
-        <button class="btn permit-btn"
-                th:onclick="|permitWebLink(${webLink.id})|">
-            링크 공유
-        </button>
+        <td>
+            <button class="btn permit-btn"
+                    th:onclick="|permitWriteWebLink(${user.id}, ${weblink_id})|">
+                쓰기 권한 부여 (읽기 포함)
+            </button>
+            <button class="btn permit-btn"
+                    th:onclick="|permitReadWebLink(${user.id}, ${weblink_id})|">
+                읽기 권한 부여
+            </button>
+
+            <button class="btn permit-btn"
+                    th:onclick="|revokeWriteWebLink(${user.id}, ${weblink_id})|">
+                쓰기 권한 해제
+            </button>
+            <button class="btn permit-btn"
+                    th:onclick="|revokeReadWebLink(${user.id}, ${weblink_id})|">
+                읽기 권한 해제 (쓰기 포함)
+            </button>
+        </td>
     </tr>
     </tbody>
 </table>
 </body>
+<script src="/js/users.js"></script>
 </html>
